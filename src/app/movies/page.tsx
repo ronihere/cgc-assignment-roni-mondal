@@ -1,8 +1,9 @@
 import { TMovie } from '@/lib/constant';
 import LogoutButton from './components/LogoutButton';
-import { cookies } from 'next/headers';
 import AddMovieButton from './components/AddMovieButton';
 import Link from 'next/link';
+import { Movie } from '../models/movie';
+import { connectDB } from '@/lib/mongo';
 
 export default async function Movies({
     searchParams,
@@ -114,14 +115,14 @@ export default async function Movies({
     );
 }
 async function getMovies(page: number): Promise<{ movies: TMovie[], totalPages: number }> {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/movies?page=${page}&limit=4`, {
-        headers: {
-            cookie: `session=${token}`,
-        },
-        cache: "no-store"
-    })
-    const data = await res.json();
-    return data;
+    await connectDB();
+    const limit = 4
+    const movies = await Movie.find({})
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .sort({ createdAt: -1 })
+        ;
+    const total = await Movie.countDocuments();
+    const totalPages = Math.ceil(total / limit);
+    return { movies, totalPages }
 }

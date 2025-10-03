@@ -83,7 +83,7 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
             }
         }
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/movies`, {
+        const res = await fetch(`${window.location.origin}/api/movies`, {
             method: isEdit ? 'PATCH' : "POST",
             body: formData,
         });

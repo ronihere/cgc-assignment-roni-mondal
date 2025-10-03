@@ -31,7 +31,7 @@ export default function Signup() {
         setServerError(null);
 
         // Example: send to API
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup`, { method: "POST", body: JSON.stringify(data) })
+        const res = await fetch(`${window.location.origin}/api/auth/signup`, { method: "POST", body: JSON.stringify(data) })
         if (!res.ok) setServerError("Invalid credentials");
         else {
             router.push('/log-in');
