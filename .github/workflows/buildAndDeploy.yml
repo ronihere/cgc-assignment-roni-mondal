@@ -19,3 +19,14 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Publish image to docker hub
         run: docker push ronihere/cgc-nextjs-assignment:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull ronihere/cgc-nextjs-assignment:latest
+      - name: Delete old container
+        run: docker rm -f nextjs-cgc-app-container  
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name nextjs-cgc-app-container ronihere/cgc-nextjs-assignment:latest
