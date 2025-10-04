@@ -130,7 +130,7 @@ export async function PATCH(req: Request) {
 
         // Check ownership (optional, but recommended)
         if (movie.createdBy.toString() !== userId.toString()) {
-            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+            return NextResponse.json({ error: "Forbidden! you can only edit the movies created by you." }, { status: 403 });
         }
 
         // Update fields

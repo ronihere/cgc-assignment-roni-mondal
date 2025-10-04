@@ -82,20 +82,22 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
                 return;
             }
         }
+        try {
 
-        const res = await fetch(`${window.location.origin}/api/movies`, {
-            method: isEdit ? 'PATCH' : "POST",
-            body: formData,
-        });
+            const res = await fetch(`${window.location.origin}/api/movies`, {
+                method: isEdit ? 'PATCH' : "POST",
+                body: formData,
+            });
+            if (!res.ok) {
+                const errorData = await res.json();
+                toast.error(`${errorData?.error || 'Something went wrong'}`);
+                return;
+            }
 
-        if (!res.ok) {
-            toast.error("Failed to submit the form. Please try again.")
-            return;
+            toast.success(`Movie ${isEdit ? "edited" : "created"} successfully 🎉`)
+            router.push('/movies');
+        } catch (error) {
         }
-
-        const json = await res.json();
-        toast.success(`Movie ${isEdit ? "edited" : "created"} successfully 🎉`)
-        router.push('/movies');
     }
 
 
