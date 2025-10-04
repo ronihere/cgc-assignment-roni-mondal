@@ -32,7 +32,7 @@ async function getMovieById(id: string) {
             // createdBy: movie.createdBy?.toString(), // if it’s ObjectId or Buffer
         };
     } catch (error) {
-        throw error;
+
     }
 
 }

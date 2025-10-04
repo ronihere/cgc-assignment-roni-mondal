@@ -6,20 +6,22 @@ import { connectDB } from "@/lib/mongo";
 import { User } from "@/app/models/user";
 import { redirect } from "next/navigation";
 import { sign } from "@/lib/auth";
+import { success } from "zod";
 
 export async function loginAction(formData: FormData) {
+    try {
     await connectDB();
     const email = formData.get("email")?.toString() || "";
     const password = formData.get("password")?.toString() || "";
 
     const user = await User.findOne({ email });
     if (!user) {
-        throw new Error("User not found");
+        return { error: "User not found", success: false };
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        throw new Error("Invalid credentials");
+        return { error: "Invalid credentials", success: false };
     }
 
     const token = await sign(
@@ -36,5 +38,8 @@ export async function loginAction(formData: FormData) {
         maxAge: 60 * 60 * 24 * 7,
     });
 
-    redirect('/movies')
+        return { success: true }
+    } catch (err: any) {
+        return { error: "Something went wrong", success: false };
+    }
 }

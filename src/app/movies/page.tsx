@@ -11,66 +11,51 @@ export default async function Movies({
     searchParams?: { [key: string]: string | string[] | undefined };
 }) {
     const currentPage = parseInt(searchParams?.page as string) || 1;
-    const handleLogout = () => {
-        console.log("Logout clicked");
-    }
     const { movies, totalPages } = await getMovies(currentPage)
     return (
-        <div className="pb-28">
+        <div className="h-screen">
 
-            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-20">
-                <div className="flex items-center justify-between space-y-10">
-                    <div className="flex items-center gap-3 ">
+            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8 md:space-y-16">
+                <div className="flex items-center">
+                    <div className="flex items-center gap-4 w-full">
                         <h1
-                            className="text-white font-bold text-6xl"
+                            className="text-white font-semibold text-2xl md:text-5xl"
                         >
                             My movies
                         </h1>
                         <AddMovieButton />
+                        <LogoutButton />
                     </div>
 
-                    <LogoutButton />
                 </div>
 
                 {/* Movie Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-8">
                     {movies.map((movie) => (
                         <Link
                             href={`/movies/${movie._id}`}
                             key={movie._id}
-                            className="rounded-xl p-2 pb-4 blur-effect-card"
-                            style={{
-                                backgroundColor: '#092C39',
-                                backdropFilter: 'blur(100px)'
-                            }}
+                            className="
+                            rounded-xl p-2 pb-4 blur-effect-card
+                            bg-[#092C39] backdrop-blur-3xl
+                          "
                         >
                             <div className="mb-4">
                                 <img
                                     src={movie.poster}
                                     alt={movie.title}
-                                    className="w-full h-[400px] object-cover rounded-xl"
+                                    className="w-full h-[50vh] md:h-80 object-cover rounded-xl"
                                 />
                             </div>
                             <div className="px-2">
                                 <h3
-                                    className="text-white mb-2"
-                                    style={{
-                                        fontFamily: 'Montserrat, sans-serif',
-                                        fontSize: '20px',
-                                        lineHeight: '32px',
-                                        fontWeight: 400
-                                    }}
+                                    className="text-white mb-2 font-medium text-lg"
                                 >
                                     {movie.title}
                                 </h3>
                                 <p
-                                    className="text-white"
-                                    style={{
-                                        fontFamily: 'Montserrat, sans-serif',
-                                        fontSize: '14px',
-                                        lineHeight: '24px',
-                                        fontWeight: 400
-                                    }}
+                                    className="text-white font-medium text-md"
+
                                 >
                                     {movie.publishingYear}
                                 </p>
@@ -80,7 +65,7 @@ export default async function Movies({
                 </div>
 
 
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2 p-4">
                     {currentPage > 1 && (
                         <Link
                             href={`/movies?page=${currentPage - 1}`}

@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { TMovie } from "@/lib/constant";
 import { EditIcon } from "lucide-react";
+import PrimaryButton from "./primaryButton";
+import SecondaryButton from "./SecondaryButton";
 
 
 const MovieSchema = z.object({
@@ -28,7 +30,7 @@ export const MoviePatchSchema = z.object({
         .regex(/^\d{4}$/, "Publishing year must be a valid year")
         .optional(),
     poster: z
-        .any() // Accept anything (File or undefined)
+        .any() 
 
 });
 type MovieFormValues = z.infer<typeof MovieSchema>;
@@ -41,7 +43,7 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
         register,
         handleSubmit,
         setValue,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<MovieFormValues | MoviePatchFormValues>({
         resolver: zodResolver(isEdit ? MoviePatchSchema : MovieSchema),
         defaultValues: {
@@ -64,12 +66,10 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
         }
     };
 
-    // Submit handler
     const onSubmit = async (data: MovieFormValues | MoviePatchFormValues) => {
         const title = data.title ?? "";
         const publishingYear = data.publishingYear ?? "";
-        const poster = data?.poster; // might be undefined for PATCH
-        // Build FormData for PATCH or POST
+        const poster = data?.poster; 
         const formData = new FormData();
         if (title) formData.append("title", title);
         if (publishingYear) formData.append("publishingYear", publishingYear);
@@ -100,16 +100,14 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
 
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="pb-8">
-            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-20 space-y-6">
-                <h1 className="text-white font-bold text-[48px] leading-[56px] font-montserrat">
-                    {isEdit ? `Edit details` : "Create a new movie"}
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="relative z-10 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-20 space-y-6">
+                <h1 className="text-white font-bold text-xl md:text-4xl mb-8 md:mb-0">
+                    {isEdit ? `Edit` : "Create a new movie"}
                 </h1>
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-[127px]">
-                    {/* Image Upload */}
-                    <div className="w-full lg:w-[473px]">
-
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-28 md:pt-4">
+                    <div className="w-full lg:w-1/2  order-2 md:order-1">
                         <input
                             type="file"
                             accept="image/*"
@@ -121,7 +119,7 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
 
                         <label
                             htmlFor="posterInput"
-                            className="w-full h-[504px] rounded-[10px] bg-input-color border-2 border-dashed border-white flex flex-col items-center justify-center cursor-pointer relative group overflow-hidden"
+                            className="w-full h-[40vh] lg:h-[60vh] rounded-[10px] bg-input-color border-2 border-dashed border-white flex flex-col items-center justify-center cursor-pointer relative group overflow-hidden"
                         >
                             {imagePreview ? (
                                 <>
@@ -147,16 +145,14 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
 
                     </div>
 
-                    {/* Form Fields */}
-                    <div className="flex-1 flex flex-col">
-                        {/* Title */}
-                        <div className="mb-6">
+                    <div className="flex-1 flex flex-col order-1 md:order-2 space-y-6">
+                        <div className="">
                             <div className="w-full lg:w-[362px] h-[45px] rounded-[10px] bg-input-color px-4 flex items-center">
                                 <input
                                     type="text"
                                     placeholder="Title"
                                     {...register("title")}
-                                    className="w-full bg-transparent border-none outline-none text-white placeholder-white font-montserrat text-[14px] leading-6"
+                                    className="w-full bg-transparent border-none outline-none text-white placeholder-white  text-[14px] leading-6"
                                 />
                             </div>
                             {errors.title && (
@@ -164,14 +160,13 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
                             )}
                         </div>
 
-                        {/* Publishing Year */}
-                        <div className="mb-16">
+                        <div className="">
                             <div className="w-full lg:w-[216px] h-[45px] rounded-[10px] bg-input-color px-4 flex items-center">
                                 <input
                                     type="text"
                                     placeholder="Publishing year"
                                     {...register("publishingYear")}
-                                    className="w-full bg-transparent border-none outline-none text-white placeholder-white font-montserrat text-[14px] leading-6"
+                                    className="w-full bg-transparent border-none outline-none text-white placeholder-white  text-[14px] leading-6"
                                 />
                             </div>
                             {errors.publishingYear && (
@@ -181,23 +176,26 @@ export default function CreateMovieForm({ isEdit = false, defaultValue }: { isEd
                             )}
                         </div>
 
-                        {/* Buttons */}
-                        <div className="flex gap-4">
-                            <button
+                        <div className="gap-4 hidden md:flex">
+                            <SecondaryButton
                                 type="button"
                                 onClick={() => router.back()}
-                                className="w-[167px] h-[56px] rounded-[10px] border border-white text-white font-bold hover:bg-white hover:bg-opacity-10 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                className="w-[179px] h-[56px] rounded-[10px] bg-primary text-white font-bold hover:opacity-90 transition-opacity"
-                            >
-                                Submit
-                            </button>
+                            >Cancel</SecondaryButton>
+
+                            <PrimaryButton
+                                disabled={isSubmitting} type="submit" className="" >Submit</PrimaryButton>
                         </div>
                     </div>
+
+                </div>
+                <div className="gap-4 flex md:hidden">
+                    <SecondaryButton
+                        type="button"
+                        onClick={() => router.back()}
+                    >Cancel</SecondaryButton>
+
+                    <PrimaryButton
+                        disabled={isSubmitting} type="submit" className="" >Submit</PrimaryButton>
                 </div>
             </div>
         </form>

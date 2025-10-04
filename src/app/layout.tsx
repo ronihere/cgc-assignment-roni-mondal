@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "./components/client/ToastProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["400", "500", "600", "700"], // pick weights you need
 });
 
 export const metadata: Metadata = {
@@ -24,15 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={` ${montserrat.className} antialiased`}
       >
         <div className="h-screen bg-sign-in-bg overflow-y-auto">
-          {/* Decorative wave SVG at bottom */}
           <svg
             className="absolute bottom-0 left-0 w-full h-auto"
-            style={{ height: '111px' }}
             viewBox="0 0 1440 111"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

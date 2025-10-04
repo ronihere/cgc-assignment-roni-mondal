@@ -1,7 +1,8 @@
+import { LoaderIcon } from "lucide-react";
 import { ButtonHTMLAttributes } from "react";
 
 interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    label: string; // custom text prop
+    label?: string; // custom text prop
 }
 
 export default function PrimaryButton({
@@ -15,7 +16,7 @@ export default function PrimaryButton({
             }
             {...props}
         >
-            {label}
+            {props.disabled ? <LoaderIcon className="mx-auto animate-spin" /> : props.children}
         </button>
     );
 }

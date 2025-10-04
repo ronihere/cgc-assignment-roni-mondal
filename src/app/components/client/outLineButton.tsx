@@ -6,12 +6,12 @@ interface OutlineButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode,
 }
 
-export default function OutLineButton({ children, onClick, type }: OutlineButtonProps) {
+export default function OutLineButton({ children, onClick, type, className }: OutlineButtonProps) {
     return (
         <button
             type={type}
             onClick={onClick}
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            className={`flex items-center gap-3 hover:opacity-80 transition-opacity ${className}`}
         >
             {children}
         </button>

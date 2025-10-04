@@ -13,7 +13,7 @@ export default function Signup() {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
         setValue,
         watch,
     } = useForm<SignupFormData>({
@@ -52,7 +52,7 @@ export default function Signup() {
                                 type="text"
                                 placeholder="Name"
                                 {...register("name")}
-                                className="w-full bg-transparent border-none outline-none text-white placeholder-white font-montserrat text-[14px] leading-6"
+                                className="w-full bg-transparent border-none outline-none text-white placeholder-white  text-[14px] leading-6"
                             />
                         </div>
                         {errors.name && (
@@ -66,7 +66,7 @@ export default function Signup() {
                                 type="email"
                                 placeholder="Email"
                                 {...register("email")}
-                                className="w-full bg-transparent border-none outline-none text-white placeholder-white font-montserrat text-[14px] leading-6"
+                                className="w-full bg-transparent border-none outline-none text-white placeholder-white  text-[14px] leading-6"
                             />
                         </div>
                         {errors.email && (
@@ -80,7 +80,7 @@ export default function Signup() {
                                 type="password"
                                 placeholder="Password"
                                 {...register("password")}
-                                className="w-full bg-transparent border-none outline-none text-white placeholder-white font-montserrat text-[14px] leading-6"
+                                className="w-full bg-transparent border-none outline-none text-white placeholder-white  text-[14px] leading-6"
                             />
                         </div>
                         {errors.password && (
@@ -96,7 +96,7 @@ export default function Signup() {
                                 type="password"
                                 placeholder="Password"
                                 {...register("confirmPassword")}
-                                className="w-full bg-transparent border-none outline-none text-white placeholder-white font-montserrat text-[14px] leading-6"
+                                className="w-full bg-transparent border-none outline-none text-white placeholder-white  text-[14px] leading-6"
                             />
                         </div>
                         {errors.confirmPassword && (
@@ -114,7 +114,7 @@ export default function Signup() {
                         <p className="text-red-500 text-xs mb-2">{serverError}</p>
                     )}
 
-                    <PrimaryButton type="button" label="Sign up" onClick={handleSubmit(onSubmit)} className="" />
+                    <PrimaryButton disabled={isSubmitting} type="button" onClick={handleSubmit(onSubmit)} className="" >Sign up</PrimaryButton>
                 </form>
             </div>
         </div>
