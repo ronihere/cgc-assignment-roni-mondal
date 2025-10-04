@@ -6,7 +6,8 @@ export async function GET(req: Request) {
     response.cookies.set("session", "", {
         path: "/",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
         maxAge: 0,
     });
     return response;
