@@ -4,9 +4,7 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongo";
 import { User } from "@/app/models/user";
-import { redirect } from "next/navigation";
 import { sign } from "@/lib/auth";
-import { success } from "zod";
 
 export async function loginAction(formData: FormData) {
     try {
